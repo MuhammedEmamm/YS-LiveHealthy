@@ -1,0 +1,513 @@
+
+<link href="assets/css/material-bootstrap-wizard.css" rel="stylesheet" />
+<link rel="stylesheet" href="assets/css/bootstrap-datetimepicker.min.css">
+<link href="assets/css/demo.css" rel="stylesheet" />
+
+<div class="image-container set-full-height" style="background-image: url('assets/img/wizard-profile.jpg')">
+    <!--   Big container   -->
+    <div class="container" ng-controller="updatedoctorCrtl">
+        <div class="row">
+            <div class="col-sm-12">
+                <h3 ng-if="!mailsent && !docarabic">Welcome, please update your personal data and your clinics and don't forget to press finish at the end.</h3>
+                <h3 ng-if="!mailsent && docarabic" dir="rtl">اهلا من فضلك حدث بيناتك الشخصية و العيادات و المواعيد و لا تنسى ان تضغط على الانتهاء في اخر الصفحة</h3>
+                <input type="radio" name="gender" ng-model="docarabic" ng-value=false> English<br>
+                <input type="radio" name="gender" ng-model="docarabic" ng-value=true> العربية<br>
+                <div ng-if="!docarabic" class="admin-box">
+                    <div ng-if="!mailsent">
+                        <div>
+                            <form ng-submit="docdetails(docnumber, arname, enname, specialityid, docemail, endescription, ardescription)">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">
+                                                <i class="material-icons">face</i>
+                                            </span>
+                                            <div class="form-group">
+                                                <label for="">Name</label>
+                                                <input type="text" class="form-control" ng-model="enname" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">
+                                                <i class="material-icons">face</i>
+                                            </span>
+                                            <div class="form-group">
+                                                <label for="">Name in Arabic</label>
+                                                <input type="text" class="form-control" ng-model="arname" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 ">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">
+                                                <i class="material-icons">email</i>
+                                            </span>
+                                            <div class="form-group">
+                                                <label for="">E-mail</label>
+                                                <input type="email" class="form-control" ng-model="docemail" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 ">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">
+                                                <i class="material-icons"><i class="material-icons">phonelink_ring</i></i>
+                                            </span>
+                                            <div class="form-group">
+                                                <label for="">Mobile Number</label>
+                                                <input type="text" class="form-control" ng-model="docnumber" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 ">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">
+                                                <i class="material-icons">work</i>
+                                            </span>
+                                            <div class="form-group label-floating">
+                                                <select ng-model="specialityid" class="form-control" required>
+                                                    <option value="" selected disabled>Speciality <small>(required)</small></option>
+                                                    <option value="{{special.Speciality_ID}}" ng-repeat="special in specialists">{{special.Name}}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 ">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">
+                                                <i class="material-icons"></i>
+                                            </span>
+                                            <div class="form-group">
+                                                <label for="">Description</label>
+                                                <input type="text" class="form-control" ng-model="endescription" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 ">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">
+                                                <i class="material-icons"></i>
+                                            </span>
+                                            <div class="form-group">
+                                                <label for="">Description in Arabic</label>
+                                                <input type="text" class="form-control" ng-model="ardescription" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="pull-right">
+                                    <button ng-if="!docdatachanged" type='submit' class='btn btn-success btn-wd'>Save New Data</button>
+                                </div>
+                                <hr ng-if="!docdatachanged">
+                            </form>
+                            <div class="pull-right">
+                                <p ng-if="docdatachanged" class="lead">Now please add your clinics and your schedules</p>
+                            </div>
+                        </div>
+                        <br><br><br>
+                        <div>
+                            <h3>Add Your Clinics</h3>
+                            <form ng-submit="addremoveclinic(true, 0, ClinicName, ClinicNameAR, ClinicPrice, ClinicAddress, ClinicAddressAR, ClinicCityID, ClinicAreaID, MobileNumber, ClinicLandLine, ClinicRequestsPerDay, ClinicDiscount)">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="input-group">
+                                            <div class="form-group">
+                                                <label for="">Name</label>
+                                                <input type="text" class="form-control" ng-model="ClinicName" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="input-group">
+                                            <div class="form-group">
+                                                <label for="">Name in Arabic</label>
+                                                <input type="text" class="form-control" ng-model="ClinicNameAR" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 ">
+                                        <div class="input-group">
+                                            <div class="form-group label-floating">
+                                                <select ng-model="ClinicCityID" class="form-control" ng-change="getarea(ClinicCityID)" required>
+                                                    <option value="" selected disabled>City <small>(required)</small></option>
+                                                    <option value="{{cty.ID}}" ng-repeat="cty in cities">{{cty.Name}}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 ">
+                                        <div class="input-group">
+                                            <div class="form-group label-floating">
+                                                <select ng-model="ClinicAreaID" class="form-control" required>
+                                                    <option value="" selected disabled>Area <small>(required)</small></option>
+                                                    <option value="{{area.ID}}" ng-repeat="area in areas">{{area.Name}}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 ">
+                                        <div class="input-group">
+                                            <div class="form-group">
+                                                <label for="">Address</label>
+                                                <input type="text" class="form-control" ng-model="ClinicAddress" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 ">
+                                        <div class="input-group">
+                                            <div class="form-group">
+                                                <label for="">Address in arabic</label>
+                                                <input type="text" class="form-control" ng-model="ClinicAddressAR" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 ">
+                                        <div class="input-group">
+                                            <div class="form-group">
+                                                <label for="">Land Line</label>
+                                                <input type="text" class="form-control" ng-model="ClinicLandLine" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 ">
+                                        <div class="input-group">
+                                            <div class="form-group">
+                                                <label for="">Request per day</label>
+                                                <input type="number" class="form-control" ng-model="ClinicRequestsPerDay" required min="1">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 ">
+                                        <div class="input-group">
+                                            <div class="form-group">
+                                                <label for="">Price</label>
+                                                <input type="number" class="form-control" ng-model="ClinicPrice" required min="1">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 ">
+                                        <div class="input-group">
+                                            <div class="form-group">
+                                                <label for="">Discount in Percentage</label>
+                                                <input type="number" class="form-control" ng-model="ClinicDiscount" required min="1" max="100">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="pull-right">
+                                    <button type='submit' class='btn btn-success btn-wd'>Add</button>
+                                </div>
+                                <hr>
+                            </form>
+                            <div class="pull-right">
+                                <button class='btn btn-success btn-wd' ng-click="sendclinics()">Save Clinics</button>
+                            </div>
+                            <br><br><br>
+                            <div ng-repeat="cli in savedclinics">
+                                <div class="well">
+                                    <p ng-if="clinicsaved" class="lead">Now Please Add your Schedule to each clinic</p>
+                                    <a href="">{{cli.Clinic_Name}}</a>
+                                    <div class="pull-right">
+<!--                                        <button class="btn btn-danger" ng-click="addremoveclinic(false, cli.Clinic_ID)">Remove</button>-->
+                                        <button ng-if="clinicsaved" class="btn btn-primary" data-target="#collapseOne{{cli.Clinic_ID}}" data-toggle="collapse" data-parent="#accordion">Add Schedule</button>
+                                    </div> 
+                                    <div id="collapseOne{{cli.Clinic_ID}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+                                        <div class="panel-body">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <form ng-submit="addschedul(wday, fromtime, totime)">
+                                                        <div class="input-group">
+                                                            <div class="form-group label-floating">
+                                                                <select ng-model="wday" class="form-control" required>
+                                                                    <option value="" selected disabled>Week Day <small>(required)</small></option>
+                                                                    <option value="{{day.ID}}" ng-repeat="day in weekdays">{{day.Name}}</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <label>Visit Time</label>
+                                                        <br>
+                                                        <span>From</span>
+                                                        <input type="time" ng-model="fromtime">
+                                                        <br>
+                                                        <span>To</span>
+                                                        <input type="time" ng-model="totime">
+                                                        <br>
+                                                        <button type="submit" class="btn btn-primary">Add</button>
+                                                    </form>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <h3>{{daysofclinic.length}} Days Added</h3>
+                                                    <button class="btn btn-primary" ng-click="saveclinicschedule(cli.Clinic_ID)">Save Schedule</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <h4>Please make sure before you finish to add all your clinics and there schedules</h4>
+                            <button class="btn btn-primary" ng-click="finish()">Finish Updating Data</button>
+                        </div>
+                        <hr>
+                    </div>
+                    <div ng-if="mailsent"><h2>Thanks for your time. Please check your E-mail.</h2></div>
+                </div>
+                <div ng-if="docarabic" class="admin-box" dir="rtl">
+                    <div ng-if="!mailsent">
+                        <div>
+                            <form ng-submit="docdetails(docnumber, arname, enname, specialityid, docemail, endescription, ardescription)">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">
+                                                <i class="material-icons">face</i>
+                                            </span>
+                                            <div class="form-group">
+                                                <label for="">الاسم باللغة الانجليزية</label>
+                                                <input type="text" class="form-control" ng-model="enname" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">
+                                                <i class="material-icons">face</i>
+                                            </span>
+                                            <div class="form-group">
+                                                <label for="">الاسم باللغة العربية</label>
+                                                <input type="text" class="form-control" ng-model="arname" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 ">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">
+                                                <i class="material-icons">email</i>
+                                            </span>
+                                            <div class="form-group">
+                                                <label for="">البريد الاليكتروني</label>
+                                                <input type="email" class="form-control" ng-model="docemail" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 ">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">
+                                                <i class="material-icons"><i class="material-icons">phonelink_ring</i></i>
+                                            </span>
+                                            <div class="form-group">
+                                                <label for="">رقم الهاتف الجوال</label>
+                                                <input type="text" class="form-control" ng-model="docnumber" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 ">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">
+                                                <i class="material-icons">work</i>
+                                            </span>
+                                            <div class="form-group label-floating">
+                                                <select ng-model="specialityid" class="form-control" required>
+                                                    <option value="" selected disabled>التخصص <small>(مطلوب تسجيلة)</small></option>
+                                                    <option value="{{special.Speciality_ID}}" ng-repeat="special in specialists">{{special.Name_AR}}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 ">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">
+                                                <i class="material-icons"></i>
+                                            </span>
+                                            <div class="form-group">
+                                                <label for="">الوصف باللغة الانجليزية</label>
+                                                <input type="text" class="form-control" ng-model="endescription" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 ">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">
+                                                <i class="material-icons"></i>
+                                            </span>
+                                            <div class="form-group">
+                                                <label for="">الوصف باللغة العربية</label>
+                                                <input type="text" class="form-control" ng-model="ardescription" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="pull-left">
+                                    <button ng-if="!docdatachanged" type='submit' class='btn btn-success btn-wd'>تحديث البيانات الشخصية</button>
+                                </div>
+                                <hr ng-if="!docdatachanged">
+                            </form>
+                            <div class="pull-left">
+                                <p class="lead">من فضلك اضف العيادات و المواعيد</p>
+                            </div>
+                        </div>
+                        <div>
+                            <h3>اضف عياداتك</h3>
+                            <form ng-submit="addremoveclinic(true, 0, ClinicName, ClinicNameAR, ClinicPrice, ClinicAddress, ClinicAddressAR, ClinicCityID, ClinicAreaID, MobileNumber, ClinicLandLine, ClinicRequestsPerDay, ClinicDiscount)">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="input-group">
+                                            <div class="form-group">
+                                                <label for="">اسم العيادة باللغة الانجليزية</label>
+                                                <input type="text" class="form-control" ng-model="ClinicName" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="input-group">
+                                            <div class="form-group">
+                                                <label for="">اسم العيادة باللغة العربية</label>
+                                                <input type="text" class="form-control" ng-model="ClinicNameAR" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 ">
+                                        <div class="input-group">
+                                            <div class="form-group label-floating">
+                                                <select ng-model="ClinicCityID" class="form-control" ng-change="getarea(ClinicCityID)" required>
+                                                    <option value="" selected disabled>المحافظة <small>(مطلوب تحديدة)</small></option>
+                                                    <option value="{{cty.ID}}" ng-repeat="cty in cities">{{cty.Name_AR}}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 ">
+                                        <div class="input-group">
+                                            <div class="form-group label-floating">
+                                                <select ng-model="ClinicAreaID" class="form-control" required>
+                                                    <option value="" selected disabled>المنطقة <small>(مطلوب تحديدة)</small></option>
+                                                    <option value="{{area.ID}}" ng-repeat="area in areas">{{area.Name_AR}}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 ">
+                                        <div class="input-group">
+                                            <div class="form-group">
+                                                <label for="">العنوان باللغة الانجليزية</label>
+                                                <input type="text" class="form-control" ng-model="ClinicAddress" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 ">
+                                        <div class="input-group">
+                                            <div class="form-group">
+                                                <label for="">العنوان باللغة العربية</label>
+                                                <input type="text" class="form-control" ng-model="ClinicAddressAR" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 ">
+                                        <div class="input-group">
+                                            <div class="form-group">
+                                                <label for="">الرقم الارضي</label>
+                                                <input type="text" class="form-control" ng-model="ClinicLandLine" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 ">
+                                        <div class="input-group">
+                                            <div class="form-group">
+                                                <label for="">عدد الحجوزات باليوم الواحد</label>
+                                                <input type="number" class="form-control" ng-model="ClinicRequestsPerDay" required min="1">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 ">
+                                        <div class="input-group">
+                                            <div class="form-group">
+                                                <label for="">السعر</label>
+                                                <input type="number" class="form-control" ng-model="ClinicPrice" required min="1">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 ">
+                                        <div class="input-group">
+                                            <div class="form-group">
+                                                <label for="">الخصم</label>
+                                                <input type="number" class="form-control" ng-model="ClinicDiscount" required min="1" max="100">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="pull-right">
+                                    <button type='submit' class='btn btn-success btn-wd'>اضافة</button>
+                                </div>
+                                <hr>
+                            </form>
+                            <div class="pull-right">
+                                <button class='btn btn-success btn-wd' ng-click="sendclinics()">تسجيل العيادات</button>
+                            </div>
+                            <br><br><br>
+                            <div ng-repeat="cli in savedclinics">
+                                <div class="well">
+                                    <p ng-if="clinicsaved" class="lead">الان من فضلك اضف مواعيد كل عيادة</p>
+                                    <a href="">{{cli.Clinic_Name_AR}}</a>
+                                    <div class="pull-right">
+<!--                                        <button class="btn btn-danger" ng-click="addremoveclinic(false, cli.Clinic_ID)">ازالة</button>-->
+                                        <button ng-if="clinicsaved" class="btn btn-primary" data-target="#collapseOne{{cli.Clinic_ID}}" data-toggle="collapse" data-parent="#accordion">اضافة المواعيد</button>
+                                    </div> 
+                                    <div id="collapseOne{{cli.Clinic_ID}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+                                        <div class="panel-body">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <form ng-submit="addschedul(wday, fromtime, totime)">
+                                                        <div class="input-group">
+                                                            <div class="form-group label-floating">
+                                                                <select ng-model="wday" class="form-control" required>
+                                                                    <option value="" selected disabled>ايام العمل <small>(مطلوب تحديدة)</small></option>
+                                                                    <option value="{{day.ID}}" ng-repeat="day in weekdays">{{day.Name}} {{day.Name_AR}}</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <label>مواقيت الزيارة</label>
+                                                        <br>
+                                                        <span>من</span>
+                                                        <input type="time" ng-model="fromtime">
+                                                        <br>
+                                                        <span>الى</span>
+                                                        <input type="time" ng-model="totime">
+                                                        <br>
+                                                        <button type="submit" class="btn btn-primary">اضافة اخر</button>
+                                                    </form>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <h3>{{daysofclinic.length}} ايام مضافة</h3>
+                                                    <button class="btn btn-primary" ng-click="saveclinicschedule(cli.Clinic_ID)">حفظ جدول المواعيد</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <h4>من فضلك تئكد من اضافتك العيادات ثم مواعيدها قبل الانهاء</h4>
+                            <button class="btn btn-primary" ng-click="finish()">انهاء تحديث البيانات</button>
+                        </div>
+                        <hr>
+                    </div>
+                    <div ng-if="mailsent"><h2>شكرا على وقتك من فضلك تفحص بريدك الالكتروني</h2></div>
+                </div>
+            </div>
+        </div><!-- end row -->
+    </div> <!--  big container -->
+</div>
+<!--   Core JS Files   -->
+<script src="assets/js/jquery-2.2.4.min.js" type="text/javascript"></script>
+<script src="assets/js/bootstrap.min.js" type="text/javascript"></script>
+<script src="assets/js/jquery.bootstrap.js" type="text/javascript"></script>
+<script src="assets/js/bootstrap-datetimepicker.min.js"></script>
+<!--  Plugin for the Wizard -->
+<script src="assets/js/material-bootstrap-wizard.js"></script>
+<!--  More information about jquery.validate here: http://jqueryvalidation.org/	 -->
+<script src="assets/js/jquery.validate.min.js"></script>
+<script type="text/javascript">
+    $(".form_datetime").datetimepicker({
+        format: "dd MM yyyy - hh:ii"
+    });
+</script>  

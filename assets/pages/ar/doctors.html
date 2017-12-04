@@ -1,0 +1,340 @@
+<div class="content">
+	<div class="content-title">
+		<div class="container">
+			<h1>الاطباء </h1>
+			<ul class="breadcrumb">
+				<li class="active">البحث عن اطباء</li>
+				<li><a href="index-ar.html">Live Healthy</a> <i class="md-icon">keyboard_arrow_left</i>
+				</li>
+
+			</ul>
+			<!-- /.breadcrumb -->
+		</div>
+		<!-- /.container -->
+	</div>
+	<!-- /.content-title -->
+	<div class="container">
+		<div class="row">
+			<div class="col-md-8 col-lg-9">
+				<div class="content">
+					<div class="push-top-bottom">
+						<div class="row">
+							<div class="sidebar">
+								<h4 ng-if="searchres.length == 0 || searchres == undefined"> لم نجد شيء <button class="btn btn-warning" ng-click="Explore()">استكشف</button></h4>
+								<div ng-if="searchres.length > 0">
+									<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+<!--
+										<h3>العيادات</h3>
+										<div class="panel panel-default" ng-repeat="res in searchres | filter:{DTOType:1}">
+											<div class="panel-heading" role="tab" id="headingOne" style="min-height: 200px">
+												<div class="review" style="margin: 0px; padding: 0px">
+													<img class="review-user" ng-src="{{res.Image}}" onerror="this.src='assets/img/1.jpg';" style="background-color: #fff">
+													<div class="review-content">
+														<h3>عيادة- {{res.Name}}</h3>
+														<p class="ellipsis">{{res.City}}, {{res.Area}}</p>
+														<p class="ellipsis">{{res.Address}}</p>
+														<div class="review-rating">
+															<i class="md-icon" style="color: gold" ng-if="res.Rate >= 1">star</i>
+															<i class="md-icon" style="color: gold" ng-if="res.Rate >= 2">star</i>
+															<i class="md-icon" style="color: gold" ng-if="res.Rate >= 3">star</i>
+															<i class="md-icon" style="color: gold" ng-if="res.Rate >= 4">star</i>
+															<i class="md-icon" style="color: gold" ng-if="res.Rate >= 5">star</i>
+														</div>
+														<p class="ellipsis">الرقم الارضي: {{res.Land_Line}}</p>
+														                                                        <p class="ellipsis">رقم المحمول: {{res.MobileNumber}}</p>
+														<p class="ellipsis">السعر: {{res.Price}}</p>
+													</div>
+													<div class="card-actions">
+														<a class="card-action-btn btn btn-transparent" data-toggle="collapse" data-parent="#accordion" href="" data-target="#collapseOne{{res.ClinicID}}" aria-expanded="false" aria-controls="collapseOne" ng-click="getclinicdoctors(res.ClinicID)">استكشف الاطباء</a>
+													</div>
+												</div>
+											</div>
+											<div id="collapseOne{{res.ClinicID}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+												<div class="panel-body">
+													<div class="well row" style="min-height: 80px; padding: 5px; margin: 0px" ng-repeat="doc in clinicdoctors">
+														<div class="col-md-4">
+															<img class="review-user" ng-src="{{doc.Image}}" onerror="this.src='assets/img/1.jpg';" style="height: 60px; width: auto">
+														</div>
+														<div class="col-md-4">
+															<p class="ellipsis">الطبيب- {{doc.Name}}</p>
+															<p class="ellipsis">التخصص- {{doc.Speciality}}</p>
+														</div>
+														<div class="col-md-4">
+															<button class="btn btn-primary" ng-click="prebooking(res.ClinicID, res.Name, doc.Doctor_ID, doc.Name)" data-toggle="modal" data-target="#bookmodal"><i class="md-icon">book</i>الحجز</button>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										
+-->
+										<h3>الاطباء</h3>
+										<div class="clickable" ng-repeat="x in specialists">
+											<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+												<div class="panel panel-default">
+													<div class="panel-heading" role="tab" id="headingOne">
+														<h4 class="panel-title">
+															<a role="button" ng-click="getSpecValue(x.Id)" data-toggle="collapse" data-parent="#accordion" data-target="#collapseOne{{x.Id}}" aria-expanded="true" aria-controls="collapseOne{{x.Id}}">
+													  <b style="font-size:25px" >{{x.Name}}</b>
+													</a>
+														</h4>
+													</div>
+													<div id="collapseOne{{x.Id}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+														<div class="col-md-offset-0" ng-if="Spec!=undefined">
+															<div class="page-header page-header-small paddng_Top">
+															</div>
+															<!-- /.page-header -->
+															<div class="filter">
+																<form ng-submit="filter(Spec)">
+																	<div class="form-group col-xl-6">
+																		<label>كلمة البحث</label>
+																		<input type="text" class="form-control" ng-model="namee.text">
+																	</div>
+																	<div class="form-group">
+														<select ng-model="city" ng-init="city = ''" ng-options="cty.City_ID as cty.Name for cty in cities" class="form-control" ng-change="getarea(city) ; GetCityName(city)">
+																			</select>
+																		<select ng-model="area" ng-init="area = ''" ng-options="area.Area_ID as area.Name for area in areas" class="form-control" ng-change="GetAreaName(area)">	</select>
+																		<select class="form-control" ng-model="gender" ng-options="x.GenderValue as x.GenderName for x in GenderAE" ng-init="gender =''" ng-change="GetGender(gender)"></select>
+																		<select ng-model="rate" ng-options="x.RateValue as x.RateName for x in RateAE" class="form-control" ng-init="rate=''" ng-change="GetRate(rate)"></select>
+																		<select ng-model="insurance" ng-init="insurance=''" ng-options="insur.ID as insur.Name for insur in insurances" class="form-control" ng-change="GetInsName(insurance)"></select>
+																		<select class="form-control" ng-model="consult" ng-options="x.ConsultValue as x.ConsultName for x in ConsultAE " ng-init="consult=''" ng-change="GetConsult(consult)"></select>
+																	</div>
+																	<div class="row">
+																		<div class="form-group col-xl-6">
+																			<label>السعر من</label>
+																			<input type="text" class="form-control" ng-model="minpricee.text">
+																		</div>
+																		<!-- /.form-group -->
+																		<div class="form-group col-xl-6">
+																			<label>السعر حتى</label>
+																			<input type="text" class="form-control" ng-model="maxpricee.text">
+																		</div>
+																		<!-- /.form-group -->
+																	</div>
+																	<!-- /.row -->
+																	<div class="form-group-btn form-group-btn-placeholder-gap">
+																		<button type="submit" class="btn btn-primary btn-block">البحث</button>
+																	</div>
+																	<!-- /.form-group -->
+																</form>
+															</div>
+															<!-- /.filter -->
+														</div>
+														<!-- /.col-* -->
+
+														<div class="panel panel-default" ng-repeat="res in searchres | filter:{DTOType:2}" ng-if="x.Name==res.Speciality">
+															<div class="panel-heading" role="tab" id="headingOne" style="min-height: 200px">
+																<div class="review" style="ma	rgin: 0px; padding: 0px">
+																	<img class="review-user" ng-src="{{res.Image}}" onerror="this.src='assets/img/profile-2.jpg';" style="background-color: #fff">
+																	<div class="review-content">
+																		<!--                                                       <p class="col-xs-offset-12" ng-if="res.HaveAds"><img     src="/assets/img/megaphone.png"/></p>-->
+																		<h3>الطبيب- {{res.Name}} &nbsp;&nbsp;&nbsp;<img ng-if="res.HaveAds" src="/assets/img/megaphone.png" /></h3>
+																		<p class="ellipsis">{{res.Speciality}} </p>
+
+																		<div class="review-rating">
+																			<i class="md-icon" style="color: gold" ng-if="res.Rate >= 1">star</i>
+																			<i class="md-icon" style="color: gold" ng-if="res.Rate >= 2">star</i>
+																			<i class="md-icon" style="color: gold" ng-if="res.Rate >= 3">star</i>
+																			<i class="md-icon" style="color: gold" ng-if="res.Rate >= 4">star</i>
+																			<i class="md-icon" style="color: gold" ng-if="res.Rate >= 5">star</i>
+																		</div>
+																	</div>
+																	<div class="card-actions">
+																		<a class="card-action-btn btn btn-transparent" ng-click="getdoctorclinics(res.Doctor_ID , res.Name)" data-toggle="modal" data-target="#bookmodal">استكشف للحجز</a>
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+
+									</div>
+								</div>
+
+							</div>
+							<!-- /.sidebar -->
+						</div>
+						<!-- /.row -->
+					</div>
+					<!-- /.push-top-bottom -->
+				</div>
+				<!-- /.content -->
+			</div>
+			<!-- /.col-* -->
+
+		</div>
+		<!-- /.row -->
+	</div>
+	<!-- /.container -->
+</div>
+<!-- /.content -->
+<!-- visit Modal -->
+<div class="modal fade" id="bookmodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="myModalLabel">حجز الطبيب</h4>
+			</div>
+			<div class="modal-body">
+
+				<div class="panel-body">
+					<div class="well row" style="min-height: 80px; padding: 5px; margin: 0px" ng-repeat="cli in doctorclinics">
+						<div class="col-md-12">
+							<p class="ellipsis">عيادة: {{cli.Name}}</p>
+							<p class="ellipsis"></p>
+							<p class="ellipsis">العنوان: {{cli.Address}} </p>
+							<p class="ellipsis"><b>الموقع:</b><a href="https://www.google.com.eg/maps/@{{cli.Longitude
+}},{{cli.latitude}},20.33z?hl=en&authuser=0">عرض علي الخريطة</a></p>
+						</div>
+						<div class="col-md-12">
+							<!--                                                            <p class="ellipsis">رقم المحمول: {{cli.Mobile_Number}}</p>-->
+							<p class="ellipsis">الرقم الارضي: {{cli.Land_Line}}</p>
+							<p class="ellipsis">السعر: {{cli.Price}}</p>
+						</div>
+						<div class="col-md-6">
+							<button class="btn btn-primary" ng-click="prebooking(cli.Clinic_ID, DocId , DocName ,cli.Name) ; togglebooking()"><i class="md-icon">book</i>&nbsp;&nbsp;&nbsp;الحجز</button>
+						</div>
+					</div>
+				</div>
+				<div ng-if="booking" class="well">
+					<p><b>الطبيب: </b>{{selecteddoctorname}}</p>
+					<p><b>في عيادة: </b>{{selectedclinicname}}</p>
+					<form ng-submit="booking()">
+						<div class="form-group">
+							<label for="">مواعيد الزيارة</label>
+							<select ng-model="vdate" class="form-control" required>
+                                <option value="" disabled selected>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;الجدول</option>
+                                <option value="{{day.Day}} {{day.From_Hour}}" ng-repeat="day in bookingdays">{{day.Day}} &nbsp;,
+									{{day.From_Hour.substring(3,5)}}	
+									:
+									{{day.From_Hour.substring(0,2) =='01' ? '1' : ''}}
+									{{day.From_Hour.substring(0,2) =='02' ? '2' : ''}}
+									{{day.From_Hour.substring(0,2) =='03' ? '3' : ''}}
+									{{day.From_Hour.substring(0,2) =='04' ? '4' : ''}}
+									{{day.From_Hour.substring(0,2) =='05' ? '5' : ''}}
+									{{day.From_Hour.substring(0,2) =='06' ? '6' : ''}}
+									{{day.From_Hour.substring(0,2) =='07' ? '7' : ''}}
+									{{day.From_Hour.substring(0,2) =='08' ? '8' : ''}}
+									{{day.From_Hour.substring(0,2) =='09' ? '9' : ''}}
+									{{day.From_Hour.substring(0,2) =='10' ? '10' : ''}}
+									{{day.From_Hour.substring(0,2) =='11' ? '11' : ''}}
+									{{day.From_Hour.substring(0,2) =='12' ? '12' : ''}}
+									{{day.From_Hour.substring(0,2) =='13' ? '1' : ''}}
+									{{day.From_Hour.substring(0,2) =='14' ? '2' : ''}}
+									{{day.From_Hour.substring(0,2) =='15' ? '3' : ''}}
+									{{day.From_Hour.substring(0,2) =='16' ? '4' : ''}}
+									{{day.From_Hour.substring(0,2) =='17' ? '5' : ''}}
+									{{day.From_Hour.substring(0,2) =='18' ? '6' : ''}}
+									{{day.From_Hour.substring(0,2) =='19' ? '7' : ''}}
+									{{day.From_Hour.substring(0,2) =='20' ? '8' : ''}}
+									{{day.From_Hour.substring(0,2) =='21' ? '9' : ''}}
+									{{day.From_Hour.substring(0,2) =='22' ? '10' : ''}}
+									{{day.From_Hour.substring(0,2) =='23' ? '11' : ''}}
+									{{day.From_Hour.substring(0,2) =='24' ? '12' : ''}}
+									
+									
+									{{day.From_Hour.substring(0,2) =='01' ? 'صباحاً' : ''}}
+									{{day.From_Hour.substring(0,2) =='02' ? 'صباحاً' : ''}}
+									{{day.From_Hour.substring(0,2) =='03' ? 'صباحاً' : ''}}
+									{{day.From_Hour.substring(0,2) =='04' ? 'صباحاً' : ''}}
+									{{day.From_Hour.substring(0,2) =='05' ? 'صباحاً' : ''}}
+									{{day.From_Hour.substring(0,2) =='06' ? 'صباحاً' : ''}}
+									{{day.From_Hour.substring(0,2) =='07' ? 'صباحاً' : ''}}
+									{{day.From_Hour.substring(0,2) =='08' ? 'صباحاً' : ''}}
+									{{day.From_Hour.substring(0,2) =='09' ? 'صباحاً' : ''}}
+									{{day.From_Hour.substring(0,2) =='10' ? 'صباحاً' : ''}}
+									{{day.From_Hour.substring(0,2) =='11' ? 'صباحاً' : ''}}
+									{{day.From_Hour.substring(0,2) =='12' ? 'مساءً' : ''}}
+									{{day.From_Hour.substring(0,2) =='13' ? 'مساءً' : ''}}
+									{{day.From_Hour.substring(0,2) =='14' ? 'مساءً' : ''}}
+									{{day.From_Hour.substring(0,2) =='15' ? 'مساءً' : ''}}
+									{{day.From_Hour.substring(0,2) =='16' ? 'مساءً' : ''}}
+									{{day.From_Hour.substring(0,2) =='17' ? 'مساءً' : ''}}
+									{{day.From_Hour.substring(0,2) =='18' ? 'مساءً' : ''}}
+									{{day.From_Hour.substring(0,2) =='19' ? 'مساءً' : ''}}
+									{{day.From_Hour.substring(0,2) =='20' ? 'مساءً' : ''}}
+									{{day.From_Hour.substring(0,2) =='21' ? 'مساءً' : ''}}
+									{{day.From_Hour.substring(0,2) =='22' ? 'مساءً' : ''}}
+									{{day.From_Hour.substring(0,2) =='23' ? 'مساءً' : ''}}
+									{{day.From_Hour.substring(0,2) =='24' ? 'صباحاً' : ''}}
+									&nbsp;
+									إلي  
+									&nbsp;
+									{{day.To_Hour.substring(3,5)}}
+									:
+									{{day.To_Hour.substring(0,2) =='01' ? '1' : ''}}
+									{{day.To_Hour.substring(0,2) =='02' ? '2' : ''}}
+									{{day.To_Hour.substring(0,2) =='03' ? '3' : ''}}
+									{{day.To_Hour.substring(0,2) =='04' ? '4' : ''}}
+									{{day.To_Hour.substring(0,2) =='05' ? '5' : ''}}
+									{{day.To_Hour.substring(0,2) =='06' ? '6' : ''}}
+									{{day.To_Hour.substring(0,2) =='07' ? '7' : ''}}
+									{{day.To_Hour.substring(0,2) =='08' ? '8' : ''}}
+									{{day.To_Hour.substring(0,2) =='09' ? '9' : ''}}
+									{{day.To_Hour.substring(0,2) =='10' ? '10' : ''}}
+									{{day.To_Hour.substring(0,2) =='11' ? '11' : ''}}
+									{{day.To_Hour.substring(0,2) =='12' ? '12' : ''}}
+									{{day.To_Hour.substring(0,2) =='13' ? '1' : ''}}
+									{{day.To_Hour.substring(0,2) =='14' ? '2' : ''}}
+									{{day.To_Hour.substring(0,2) =='15' ? '3' : ''}}
+									{{day.To_Hour.substring(0,2) =='16' ? '4' : ''}}
+									{{day.To_Hour.substring(0,2) =='17' ? '5' : ''}}
+									{{day.To_Hour.substring(0,2) =='18' ? '6' : ''}}
+									{{day.To_Hour.substring(0,2) =='19' ? '7' : ''}}
+									{{day.To_Hour.substring(0,2) =='20' ? '8' : ''}}
+									{{day.To_Hour.substring(0,2) =='21' ? '9' : ''}}
+									{{day.To_Hour.substring(0,2) =='22' ? '10' : ''}}
+									{{day.To_Hour.substring(0,2) =='23' ? '11' : ''}}
+									{{day.To_Hour.substring(0,2) =='24' ? '12' : ''}}
+									
+									
+									
+									{{day.To_Hour.substring(0,2) =='01' ? 'صباحاً' : ''}}
+									{{day.To_Hour.substring(0,2) =='02' ? 'صباحاً' : ''}}
+									{{day.To_Hour.substring(0,2) =='03' ? 'صباحاً' : ''}}
+									{{day.To_Hour.substring(0,2) =='04' ? 'صباحاً' : ''}}
+									{{day.To_Hour.substring(0,2) =='05' ? 'صباحاً' : ''}}
+									{{day.To_Hour.substring(0,2) =='06' ? 'صباحاً' : ''}}
+									{{day.To_Hour.substring(0,2) =='07' ? 'صباحاً' : ''}}
+									{{day.To_Hour.substring(0,2) =='08' ? 'صباحاً' : ''}}
+									{{day.To_Hour.substring(0,2) =='09' ? 'صباحاً' : ''}}
+									{{day.To_Hour.substring(0,2) =='10' ? 'صباحاً' : ''}}
+									{{day.To_Hour.substring(0,2) =='11' ? 'صباحاً' : ''}}
+									{{day.To_Hour.substring(0,2) =='12' ? 'مساءً' : ''}}
+									{{day.To_Hour.substring(0,2) =='13' ? 'مساءً' : ''}}
+									{{day.To_Hour.substring(0,2) =='14' ? 'مساءً' : ''}}
+									{{day.To_Hour.substring(0,2) =='15' ? 'مساءً' : ''}}
+									{{day.To_Hour.substring(0,2) =='16' ? 'مساءً' : ''}}
+									{{day.To_Hour.substring(0,2) =='17' ? 'مساءً' : ''}}
+									{{day.To_Hour.substring(0,2) =='18' ? 'مساءً' : ''}}
+									{{day.To_Hour.substring(0,2) =='19' ? 'مساءً' : ''}}
+									{{day.To_Hour.substring(0,2) =='20' ? 'مساءً' : ''}}
+									{{day.To_Hour.substring(0,2) =='21' ? 'مساءً' : ''}}
+									{{day.To_Hour.substring(0,2) =='22' ? 'مساءً' : ''}}
+									{{day.To_Hour.substring(0,2) =='23' ? 'مساءً' : ''}}
+									{{day.To_Hour.substring(0,2) =='24' ? 'صباحاً' : ''}}</option>
+                            </select>
+						</div>
+						<div class="form-group">
+							<label for="">ملاحظات</label>
+							<textarea type="text" class="form-control" ng-model="vinfo"></textarea>
+						</div>
+						<button class="btn btn-primary" type="submit" ng-if="!bookingconfirm">تأكيد التسجيل</button>
+						<p ng-if="bookingconfirm">تم تأكيد الحجز</p>
+					</form>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">الغاء</button>
+			</div>
+		</div>
+	</div>
+</div>
+<style>
+	.clickable:hover {
+		cursor: pointer;
+	}
+</style>

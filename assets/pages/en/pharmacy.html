@@ -1,0 +1,368 @@
+<div class="content">
+	<div class="content-title">
+		<div class="container">
+			<h1>Request pharmacy</h1>
+			<ul class="breadcrumb">
+				<li><a href="index.html">Live Healthy</a> <i class="md-icon">keyboard_arrow_right</i></li>
+				<li class="active">Request pharmacy</li>
+			</ul>
+			<!-- /.breadcrumb -->
+		</div>
+		<!-- /.container -->
+	</div>
+	<!-- /.content-title -->
+	<div class="container push-top-bottom">
+		<div class="row">
+			<div class="col-md-8 col-lg-9">
+				<div class="box" ng-if="prevreq.length > 0">
+					<h2>
+						Request List
+						<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#reqlist" aria-expanded="false" aria-controls="reqlist">
+                            Open / Close
+                        </button>
+					</h2>
+					<div class="collapse" id="reqlist">
+						<div class="well">
+							<table class="table small-header">
+								<thead>
+									<tr>
+										<th>Id</th>
+										<th>Date</th>
+										<th>Status</th>
+										<th>More Details</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr ng-repeat="req in prevreq">
+										<td>{{req.Order_ID}}</td>
+										<td>
+											{{req.Date.substr(0, (req.Date.indexOf(" ")))}}
+											<br> {{req.Date.substr((req.Date.indexOf(" ")))}}
+										</td>
+										<td>{{req.Status}}</td>
+										<td><a href="" ng-click="openprevreq(req.Order_ID, req.Address, req.Comment, req.Rate, req.Status, req.Message, req.Date, req.Order_Medications) ; resetbools()">Details</a></td>
+									</tr>
+								</tbody>
+							</table>
+							<!-- /.table -->
+						</div>
+					</div>
+				</div>
+				<!-- /.box -->
+				<div class="box">
+					<h2>
+						New Request
+					</h2>
+					<form ng-submit="requestmedication()">
+						<fieldset>
+							<legend>Basic Information</legend>
+								<div class="form-group">
+									<label class="col-sm-3 col-xs-6" style="margin-top: 8px">Medicine Name</label>
+									<input type="text" data-role="form-control" placeholder="Medicine Name"  ng-model="medName.text" />
+									<h6 ng-if="AddtoOrder && medName.text==undefined || medName.text==''" style="color:red">Please Enter Medicine Name.</h6>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-3 col-xs-6" style="margin-top: 8px">Amount</label>
+									<input pattern="[0-9]+" type="number" min="1" placeholder="Amount" data-role="form-control"  ng-model="Amount.text" />
+									<h6 ng-if="AddtoOrder&&Amount.text==undefined" style="color:red">Please Enter Amount.</h6>
+
+								</div>
+								<div class="form-group">
+
+									<label class="col-sm-3 col-xs-6" style="margin-top: 8px">Drug Form</label>
+									<select ng-model="FormEdD" ng-init="FormEdD = 0" ng-options = "x.FormName as x.FormName for x in FormE" style="border-bottom: 2px solid #01a796 ; border-radius : 5% ; font-size : 13px ; width : 22.5%" ng-change="getformEvalue(FormEdD)">
+									</select>
+									<h6 ng-if="AddtoOrder && FormEdD==0 ||FormEdD==undefined" style="color : red">Please Select Form</h6>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-3 col-xs-6" style="margin-top: 8px">Drug Unit</label>
+									<select  ng-options="x.UnitName as x.UnitName for x in UnitE" ng-init="UnitEd = 0 "   style="border-bottom: 2px solid #01a796 ; border-radius : 5% ; font-size : 13px ; width : 22.5%" ng-model="UnitEd"  ng-change="getunitEvalue(UnitEd)">
+									</select>
+									<h6 ng-if="AddtoOrder && UnitEd==0 || UnitEd ==undefined" style="color : red">Please Select Unit</h6>
+								</div>
+								<br>
+								<div class="form-group" style="margin-left : 40%">
+									<button type="button" class="btn btn-primary" ng-click="addmedicine()">Add To Order</button>
+								</div>
+							
+							<hr>
+							<div class="form-group">
+								<label>Order's Medicines</label>
+								<div class="form-control" style="overflow : auto">
+									<span class="clickable" ng-repeat="x in allmed" style="background-color : #01a796 ; margin-right : 1% ;">
+										<b  style="color : #fff ; font-size : 15 px" ng-click="meddetails(x.Medicine_ID)">{{x.Medicine_Name}}</b>
+									</span>
+									<b style="font-size : 15" ng-if="allmed.length ==0">Nothing Added.</b>
+								</div>
+									<h6 ng-if="SubmitReq &&allmed.length ==0" style="color:red">Please Add Medicines To The Order.</h6>
+							</div>
+
+							<!-- /.form-group -->
+							<div class="form-group">
+								<label>Address</label>
+								<input type="text" class="form-control" ng-model="medaddress" required/>
+								<h6 ng-if="SubmitReq && medaddress == undefined" style="color:red">Please Enter Address.</h6>
+							</div>
+							<!-- /.form-group -->
+							<div class="form-group">
+								<label>Comment</label>
+								<textarea class="form-control" rows="6" ng-model="medcomment"></textarea>
+							</div>
+							<!-- /.form-group -->
+						</fieldset>
+						<fieldset>
+							<legend>Upload medical prescription</legend>
+							<div class="text-center upload_file">
+								<input type="file" name="file" id="prescription" class="inputfile" style="display: block" />
+								<label for="file"> <i class="fa fa-upload"></i> Choose a file</label>
+							</div>
+						</fieldset>
+						<div class="center">
+							<button type="submit" class="btn btn-primary btn-large" ng-click="SetSubmit()">Submit</button>
+						</div>
+					</form>
+					<!-- /.center -->
+				</div>
+				<!-- /.box -->
+			</div>
+			<!-- Col -->
+			<div class="col-md-4 col-lg-3">
+				<div class="sidebar">
+					<div class="widget widget-background-white">
+						<p style="text-align: center;"><img src="assets/img/cup.svg" style="width: 86px;"></p>
+						<h4 class="widgettitle widgettitle-2 text-center">Egypt Pharmacies Group</h4>
+						<img src="/assets/img/logo-2.png" />
+						<p class="well text-center">Book online, Pay at the pharmacy!</p>
+						<h6 class="text-center"><i class="md-icon">phone</i> 19110</h6>
+					</div>
+					<!-- /.widget -->
+				</div>
+				<!-- /.sidebar -->
+			</div>
+			<!-- /.col-* -->
+		</div>
+		<!-- Row -->
+	</div>
+	<!-- /.container -->
+</div>
+<!-- /.content -->
+<!-- details Modal -->
+<div class="modal fade" id="prevreqdetails" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	<!-- detailsadd   detailstat detailsmes detailsdate detailsmeds-->
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="myModalLabel">Request Id: {{detilsid}}</h4>
+			</div>
+			<div class="modal-body">
+				<div ng-if="!EditDetails && !AddMedDetail && !toggleeditdetails ">
+					<ul>
+						<li>Address: {{detailsadd}}</li>
+						<li ng-if="detailscom!='undefined' && detailscom!=''">Comment: {{detailscom}}</li>
+						<li ng-if="detailsrate == 0">Rating: Not Rated Yet</li>
+						<li id="allowrate" ng-if="detailstat == 'Delivered' ">
+							<input type="number" ng-model="ratedeliv" name="quantity" min="1" max="5">
+							<button class="btn btn-primary" ng-click="editreq(detilsid, detailsadd, detailscom, ratedeliv, 'Delivered')">Rate</button>
+						</li>
+						<li ng-if="detailsrate > 0" ng-if="detailstat == 'Delivered' ">Rating: {{detailsrate}}</li>
+						<li>Status: {{detailstat}}</li>
+						<li ng-if="detailsmes.length > 0">Pharmacy Message: {{detailsmes}}</li>
+						<li>
+							{{detailsdate}}
+						</li>
+						<li class="well">
+							<p ng-repeat="med in detailsmeds">
+
+								<b>Medicine Name :&nbsp;{{med.Medicine_Name}}</b>
+								<br>
+								<b>Amount:&nbsp; {{med.Amount}}</b>
+								<br>
+								<b>Drug Form :&nbsp;{{med.DrugForm}}</b>
+								<br>
+								<b>Drug Quantity : &nbsp;{{med.DrugQuantity}}</b>
+								<br>
+							</p>
+						</li>
+					</ul>
+					<div id="allowedit" ng-if="detailstat == 'Pending'">
+						<button class="btn btn-info" href="" ng-click="SwitchDet()">Edit</button>&nbsp;&nbsp;<button class="btn btn-danger" ng-click="editreq(detilsid, detailsadd, detailscom, detailsrate, 'Canceled')">Cancel Order</button>
+					</div>
+				</div>
+				<div ng-if="!toggleeditdetails && EditDetails && !AddMedDetail">
+					<form ng-submit="editreq(detilsid, detailsadd, detailscom, detailsrate, 'Pending')">
+						<div class="form-group" ng-if="detailstat == 'Pending' ">
+							<label>Order's Medicines</label>
+							<div class="form-control" style="overflow : auto">
+								<span class="clickable" ng-repeat="x in detailsmeds track by $index" style="background-color : #01a796 ; margin-right : 1% ;">
+										<b  style="color : #fff ; font-size : 15 px" ng-click="ToEditDetails($index)">{{x.Medicine_Name}} </b>
+									</span>
+							</div>
+						</div>
+						<div class="form-group">
+							<h6><b>Click on the medicine to Edit\Delete</b> </h6>
+							<button ng-if="detailstat == 'Pending' " type="submit" class="btn btn-info" ng-click="SwitchAdd()">Add Medicine</button>
+						</div>
+						<div class="form-group">
+							<label>Address</label>
+							<input type="text" class="form-control" ng-model="detailsadd" required />
+						</div>
+						<div class="form-group">
+							<label>Comment</label>
+							<input type="text" class="form-control" ng-model="detailscom">
+						</div>
+						<button ng-if="detailstat == 'Pending' " type="submit" class="btn btn-success">Save</button>
+					</form>
+					<button class="btn btn-primary" ng-click="resetbools()">Cancel Edit</button>
+				</div>
+				<div ng-if="toggleeditdetails">
+					<form ng-submit="EditMedDetails(MedicId)">
+						<div class="form-group">
+							<label class="col-sm-3 col-xs-6" style="margin-top: 8px">Medicine Name :</label>
+							<input type="text" placeholder="Medicine Name" ng-model="MedEditdname.text" required/>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-3 col-xs-6" style="margin-top: 8px">Amount : </label>
+							<input pattern="[0-9]+" placeholder="Amount" type="number" min="0" ng-model="MedEditdamount.text" required/>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-3 col-xs-6" style="margin-top: 8px">Drug Form : </label>
+							<select ng-model="FormEdD" ng-init="FormEdD = FormDet ; getformEvalue(FormEdD)" ng-options = "x.FormName as x.FormName for x in FormE" style="border-bottom: 2px solid #01a796 ; border-radius : 5% ; font-size : 13px ; width : 22.5%" ng-change="getformEvalue(FormEdD)">
+									</select>
+							<h6 ng-if="SubmitEdit && (FormEdD==undefined||FormEdD==0)" style="color : red">Please Select Form</h6>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-3 col-xs-6" style="margin-top: 8px">Drug Unit : </label>
+							<select  ng-options="x.UnitName as x.UnitName for x in UnitE"   style="border-bottom: 2px solid #01a796 ; border-radius : 5% ; font-size : 13px ; width : 22.5%" ng-model="UnitEd" ng-init="UnitEd = UnitDet ;getunitEvalue(UnitEd) " ng-change="getunitEvalue(UnitEd)">
+							</select>
+							<h6 ng-if=" SubmitEdit && (UnitEd==undefined||UnitEd==0)" style="color : red">Please Select Unit</h6>
+						</div>
+						<div class="modal-footer">
+							<button type="submit" class="btn btn-success">Submit Edit</button>
+							<button type="button" class="btn btn-danger" ng-click="DeleteMedDet(MedicId)">Delete</button>
+							<button type="button" class="btn btn-primary" ng-click="toggledetailsedit()">Back</button>
+						</div>
+					</form>
+					<button class="btn btn-primary" ng-click="resetbools()">Cancel Edit</button>
+				</div>
+				<div ng-if="AddMedDetail">
+					<form ng-submit="AddMedDetails()">
+						<div class="form-group">
+							<label class="col-sm-3 col-xs-6" style="margin-top: 8px">Medicine Name :</label>
+							<input type="text" placeholder="Medicine Name" ng-model="MedDetailName.text" required/>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-3 col-xs-6" style="margin-top: 8px">Amount : </label>
+							<input pattern="[0-9]+" placeholder="Amount" type="number" min="0" ng-model="MedDetailAmount.text" required/>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-3 col-xs-6" style="margin-top: 8px">Drug Form : </label>
+							<select ng-model="FormEdD" ng-init="FormEdD = 0" ng-options = "x.FormName as x.FormName for x in FormE" style="border-bottom: 2px solid #01a796 ; border-radius : 5% ; font-size : 13px ; width : 22.5%" ng-change="getformEvalue(FormEdD)">
+									</select>
+							<h6 ng-if="AddtoOrder && (FormEdD==undefined||FormEdD==0)" style="color : red">Please Select Form</h6>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-3 col-xs-6" style="margin-top: 8px">Drug Unit : </label>
+							<select  ng-options="x.UnitName as x.UnitName for x in UnitE" ng-init="UnitEd = 0 "  style="border-bottom: 2px solid #01a796 ; border-radius : 5% ; font-size : 13px ; width : 22.5%" ng-model="UnitEd"  ng-change="getunitEvalue(UnitEd)">
+							</select>
+							<h6 ng-if=" AddtoOrder && (UnitEd==undefined||UnitEd==0)" style="color : red">Please Select Unit</h6>
+						</div>
+						<div class="modal-footer">
+							<button type="submit" class="btn btn-success">Add To Order</button>
+							<button type="button" class="btn btn-primary" ng-click="SwitchAdd()">Back</button>
+						</div>
+					</form>
+					<button class="btn btn-primary" ng-click="resetbools()">Cancel Edit</button>
+				</div>
+
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="getmeddetails" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h3 class="modal-title" id="myModalLabel">{{MedcName}}</h3>
+			</div>
+			<div class="modal-body" ng-if="!Editmed">
+				<label>Amount : </label>
+				<span>{{AmountDetail}}</span>
+				<br>
+				<label>Drug Form : </label>
+				<span>{{DrugFormDetail}}</span>
+				<br>
+				<label>Drug Quantity : </label>
+				<span>{{DrugQuantityDetail}}</span>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-danger" data-dismiss="modal" ng-click="DeleteMed(MedID)">Delete</button>
+					<button type="button" class="btn btn-primary" ng-click="toggleedit()">Edit</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+			<div class="modal-body" ng-if="Editmed">
+				<form ng-submit="EditMed(MedID)">
+					<div class="form-group">
+						<label class="col-sm-3 col-xs-6" style="margin-top: 8px">Medicine Name :</label>
+						<input type="text" ng-model="MedEditname.text" required/>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 col-xs-6" style="margin-top: 8px">Amount : </label>
+						<input pattern="[0-9]+" type="number" min="0" ng-model="MedEditamount.text" required/>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 col-xs-6" style="margin-top: 8px">Drug Form : </label>
+						<select ng-model="FormEdD" ng-init="FormEdD = DrugFormDetail ; getformEvalue(FormEdD)" ng-options = "x.FormName as x.FormName for x in FormE" style="border-bottom: 2px solid #01a796 ; border-radius : 5% ; font-size : 13px ; width : 22.5%" ng-change="getformEvalue(FormEdD)">
+									</select>
+						<h6 ng-if="SubmitEdit && (FormEdD==undefined||FormEdD==0)" style="color : red">Please Select Form</h6>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 col-xs-6" style="margin-top: 8px">Drug Unit : </label>
+						<select  ng-options="x.UnitName as x.UnitName for x in UnitE"  style="border-bottom: 2px solid #01a796 ; border-radius : 5% ; font-size : 13px ; width : 22.5%" ng-model="UnitEd" ng-init="UnitEd = DrugQuantityDetail ; getunitEvalue(UnitEd)" ng-change="getunitEvalue(UnitEd)">
+											</select>
+						<h6 ng-if=" SubmitEdit && (UnitEd==undefined||UnitEd==0)" style="color : red">Please Select Unit</h6>
+					</div>
+					<div class="modal-footer">
+						<button type="submit" class="btn btn-success">Submit</button>
+						<button type="button" class="btn btn-primary" ng-click="toggleedit()">Back</button>
+						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="successorder" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h3 class="modal-title" id="myModalLabel">Order {{OrderID}}</h3>
+			</div>
+			<div class="modal-body">
+					<h3>Your Order Has Been Sent Successfully.</h3>
+			</div>
+			<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript" src="assets/js/tagsinput.js"></script>
+<style>
+	.clickable:hover {
+		cursor: pointer;
+	}
+</style>
+<script>
+	function reload() {
+		location.reload();
+	}
+</script>

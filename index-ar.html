@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+
+	<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&amp;subset=latin,latin-ext" rel="stylesheet" type="text/css">
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
+	<link href="assets/fonts/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<link href="assets/libraries/owl-carousel/owl.carousel.css" rel="stylesheet" type="text/css">
+	<link href="assets/css/leaflet.css" rel="stylesheet" type="text/css">
+	<link href="assets/css/leaflet.markercluster.css" rel="stylesheet" type="text/css">
+	<link href="assets/css/leaflet.markercluster.default.css" rel="stylesheet" type="text/css">
+	<link href="assets/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+	<link href="assets/css/tagsinput.css" rel="stylesheet" type="text/css">
+	<link href="assets/css/style.css" rel="stylesheet" type="text/css" id="css-primary">
+	<!-- ************//// Designed by Aliaa Hosny  //// ************* -->
+	<title>Live-Healthy</title>
+	<script>
+		var apiurl = "http://yakensolution.cloudapp.net:80/LiveHealthy/api/",
+			language = "AR",
+			lang = "ar";
+
+		function scrollWin() {
+			window.scrollTo(0, 0);
+		}
+	</script>
+</head>
+
+<body class="" ng-app="myApp" dir="rtl">
+	<div class="page-wrapper">
+		<div class="header-wrapper" ng-controller="headerCtrl">
+			<div class="header">
+				<div class="header-inner">
+					<div class="header-top">
+						<div class="container">
+							<a href="index-ar.html" class="pull-right">
+                                <img src="assets/img/logo.png" alt="" class="header-top-logo">
+                            </a>
+							<div class="nav-primary-wrapper collapse navbar-toggleable-sm pull-right">
+								<ul class="nav nav-pills ">
+									<li class="nav-item has-submenu">
+										<a href="" ng-click="gotopage('')" class="nav-link">الرئيسية</a>
+									</li>
+
+									<li class="nav-item has-submenu">
+										<a href="" ng-click="gotopage('about')" class="nav-link ">عن ليف هيلثي</a>
+									</li>
+
+									<li class="nav-item has-submenu">
+										<a href="" ng-click="gotopage('t&c')" class="nav-link ">الشروط و الاحكام</a>
+									</li>
+
+									<li class="nav-item has-submenu">
+										<a href="" data-toggle="modal" data-target="#contactusModal" class="nav-link ">تواصل معنا</a>
+									</li>
+									<li class="nav-item" ng-if="!islogedin">
+										<span><a href="" class="btn btn-primary" data-toggle="modal" data-target="#loginmodal"> الدخول</a></span>
+										<span><a href="" class="btn btn-primary" data-toggle="modal" data-target="#regmodal"> التسجيل</a></span>
+										<span><a href="#doctor_registeration" class="btn btn-primary" data-toggle="modal" data-target=""> التسجيل كطبيب</a></span>
+										<!--<a href="" class="bg-Info"> Register as adoctor !</a>-->
+									</li>
+									<div ng-if="islogedin" style="display: inline-block; padding-left: 20px">
+										<li class="nav-item user-avatar-wrapper pull-right" style="display:inline-block">
+											<img class="nav-link circle user-avatar-image" ng-src={{patientdetails.PatientDetails.Image}} onerror="this.src='assets/img/avatar.png';" style="background-color: #fff">
+											<ul class="header-more-menu" style="z-index: 999">
+												<li><a href="" ng-click="gotopage('profile')">صفحتي</a>
+												</li>
+												<hr style="margin: 5px 0px">
+												<li ng-if="subprofiles.length < 2"><a href="" data-toggle="modal" data-target="#addsubmodal">اضافة حساب</a>
+												</li>
+												<li ng-repeat="subpro in subprofiles"><a href="" ng-click="subprofileview(subpro.Patient_ID)">{{subpro.Patient_Name}}</a>
+												</li>
+												<hr style="margin: 5px 0px">
+												<li><a href="" ng-click="logout()">الخروج</a>
+												</li>
+											</ul>
+										</li>
+									</div>
+								</ul>
+								<!-- /.nav -->
+							</div>
+							<!-- /.nav-primary-wrapper -->
+
+							<button class="navbar-toggler pull-xs-right hidden-md-up" type="button" data-toggle="collapse" data-target=".nav-primary-wrapper">
+                                <i class="md-icon">menu</i>
+                            </button>
+						</div>
+						<!-- /.container -->
+					</div>
+					<!-- /.header-top -->
+
+
+					<div class="header-bottom">
+						<div class="container">
+							<div class="header-bottom-more">
+								<i class="md-icon">language</i>
+
+								<ul class="header-more-menu">
+									<li><a href="index.html">English</a>
+									</li>
+								</ul>
+							</div>
+							<!-- /.header-bottom-more -->
+							<div class="header-bottom-label hidden-md-down pull-right">
+								ابحث عن
+							</div>
+							<!-- /.header-bottom-label -->
+
+							<ul class="nav nav-pills pull-right">
+								<li class="nav-item"><a href="" ng-click="gotopageinside('pharmacy')" class="nav-link">صيدلية<br></a>
+								</li>
+								<li class="nav-item"><a href="" style="cursor: default" data-toggle="tooltip" data-placement="bottom" title="لم يتوفر بعد" class="nav-link">اشعة<br><span class="label label-info">قريبا</span></a>
+								</li>
+								<li class="nav-item"><a href="" style="cursor: default" data-toggle="tooltip" data-placement="bottom" title="لم يتوفر بعد" class="nav-link">معمل<br><span class="label label-info">قريبا</span></a>
+								</li>
+								<li class="nav-item"><a href="" style="cursor: default" data-toggle="tooltip" data-placement="bottom" title="لم يتوفر بعد" class="nav-link">طواريء<br><span class="label label-info">قريبا</span></a>
+								</li>
+								<li class="nav-item"><a href="" ng-click="gotopage('home_visit')" class="nav-link">زيارة منزلية</a>
+								</li>
+								<li class="nav-item"><a href="" ng-click="gotopage('doctors')" class="nav-link">طبيب</a>
+								</li>
+							</ul>
+							<!-- /.nav -->
+
+
+						</div>
+						<!-- /.container -->
+					</div>
+					<!-- /.header-bottom -->
+
+				</div>
+				<!-- /.header-inner -->
+			</div>
+			<!-- /.header -->
+			<!--modals-->
+			<!-- login Modal -->
+			<div class="modal fade" id="loginmodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+							<h4 class="modal-title" id="myModalLabel">الدخول على الحساب</h4>
+						</div>
+						<div class="modal-body">
+							<ul class="nav nav-tabs" role="tablist" style="display: none">
+								<li role="presentation" class="active"><a href="#loginform" aria-controls="loginform" role="tab" data-toggle="tab">Home</a></li>
+								<li role="presentation"><a href="#forgetform" aria-controls="forgetform" role="tab" data-toggle="tab">Profile</a></li>
+								<li role="presentation"><a href="#resetform" aria-controls="resetform" role="tab" data-toggle="tab">Messages</a></li>
+							</ul>
+							<!-- Tab panes -->
+							<div class="tab-content">
+								<div role="tabpanel" class="tab-pane active" id="loginform">
+									<form>
+										<div class="row">
+											<div class="col-lg-8 col-lg-offset-2">
+												<form>
+													<div class="form-group">
+														<label for="">البريد الالكتروني</label>
+														<input type="text" class="form-control" ng-model="loginemail">
+													</div>
+													<!-- /.form-group -->
+													<div class="form-group">
+														<label for="">كلمة السر</label>
+														<input type="password" class="form-control" ng-model="loginpass">
+													</div>
+													<!-- /.form-group -->
+													<span ng-if="errorlogin" style="color: #01a796">{{errormsg}}</span>
+													<div class="form-group-btn">
+														<button type="submit" class="btn btn-primary pull-right" ng-click="loginup()">الدخول</button>
+													</div>
+													<!-- /.form-group-btn -->
+													<div class="form-group-bottom-link">
+														<a href="" data-target="#forgetform" aria-controls="forgetform" role="tab" data-toggle="tab">نسيت كلمة السر؟<i class="fa fa-long-arrow-right"></i></a>
+													</div>
+													<!-- /.form-group-bottom-link -->
+													<p>او</p><button class="btn btn-info" ng-click="FBLogin()">الدخول باستخدام فيسبوك</button>
+												</form>
+											</div>
+											<!-- /.col-* -->
+										</div>
+										<!-- /.row -->
+									</form>
+								</div>
+								<div role="tabpanel" class="tab-pane" id="forgetform">
+									<form>
+										<div class="form-group">
+											<label for="">البريد الالكتروني</label>
+											<input type="text" class="form-control" required ng-model="forgetemail">
+										</div>
+										<p>{{forgeterrormsg}}</p>
+										<!-- /.form-group -->
+										<div class="form-group-btn">
+											<button type="submit" class="btn btn-primary btn-block" data-target="#resetform" aria-controls="resetform" role="tab" data-toggle="tab" ng-click="forgetpass()">تغير كلمة السر</button>
+										</div>
+										<!-- /.form-group-btn -->
+										<div class="form-group-bottom-link">
+											<a href="" data-target="#loginform" aria-controls="loginform" role="tab" data-toggle="tab"><i class="fa fa-long-arrow-left"></i> العودة للدخول</a>
+										</div>
+										<!-- /.form-group-bottom-link -->
+									</form>
+								</div>
+								<div role="tabpanel" class="tab-pane" id="resetform">
+									<form ng-submit="resetpass()">
+										<div class="form-group">
+											<label for="">البريد الالكتروني</label>
+											<input type="email" class="form-control" required ng-model="forgetemail">
+										</div>
+										<!-- /.form-group -->
+										<div class="form-group">
+											<label for="">كلمة السر</label>
+											<input type="password" class="form-control" required ng-model="newpass">
+										</div>
+										<!-- /.form-group -->
+										<div class="form-group">
+											<label for="">الكود الذي تم ارسالة لبريدك لااليكتروني</label>
+											<input type="text" class="form-control" required ng-model="newvercode">
+										</div>
+										<!-- /.form-group -->
+										<div class="form-group-btn">
+											<button type="submit" class="btn btn-primary btn-block">كلمة السر الجديدة</button>
+										</div>
+										<p>{{vermessage}}</p>
+										<!-- /.form-group-btn -->
+										<div class="form-group-bottom-link">
+											<a href="" data-target="#loginform" aria-controls="loginform" role="tab" data-toggle="tab"><i class="fa fa-long-arrow-left"></i> العودة للدخول</a>
+										</div>
+										<!-- /.form-group-bottom-link -->
+									</form>
+								</div>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default" data-dismiss="modal">الغاء</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- contact us Modal -->
+			<div class="modal fade" id="contactusModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+							<h4 class="modal-title" id="myModalLabel">للتواصل معنا</h4>
+						</div>
+						<div class="modal-body">
+							<form ng-submit="contactusform()">
+								<div class="form-group">
+									<label for="">العنوان</label>
+									<input type="text" class="form-control" ng-model="contactsubject" required>
+								</div>
+								<div class="form-group">
+									<label for="">البريد الالكتروني</label>
+									<input type="email" class="form-control" ng-model="contactemail" required>
+								</div>
+								<div class="form-group">
+									<label for="">رسالتك</label>
+									<textarea type="text" class="form-control" ng-model="contactmsg" required></textarea>
+								</div>
+								<button type="submit" class="btn btn-primary">ارسال</button>
+							</form>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-primary" data-dismiss="modal">الغاء</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- registration Modal -->
+			<div class="modal fade" id="regmodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+							<h4 class="modal-title" id="myModalLabel">التسجيل</h4>
+						</div>
+						<div class="modal-body">
+							<form>
+								<div class="row">
+									<div class="col-lg-8 col-lg-offset-2">
+										<button class="btn btn-info" ng-click="FBreg()">التسجيل بالفيس بوك</button>
+										<p ng-if="choosefacebook">من فضلك اكمل بياناتك لتسجيل الدخول</p>
+										<p ng-if="!choosefacebook">او سجل بدون الفيس بوك</p>
+										<div class="form-group">
+											<label for="">اسم المستخدم&ast;</label>
+											<input type="text" class="form-control" ng-model="regname" required>
+										</div>
+										<div class="form-group">
+											<label for="">البريد الالكتروني&ast;</label>
+											<input type="email" class="form-control" ng-model="regemail" required>
+										</div>
+										<div class="form-group" ng-if="!choosefacebook">
+											<label for="">كلمة السر&ast;</label>
+											<input type="password" class="form-control" ng-model="regpass" required>
+										</div>
+										<div class="form-group">
+											<label for="">العنوان</label>
+											<input type="text" class="form-control" ng-model="regadd">
+										</div>
+										<div class="form-group">
+											<label for="">رقم المحمول</label>
+											<input type="text" class="form-control" ng-model="regmob">
+										</div>
+										<div class="form-group">
+											<label for="">تاريخ الميلاد</label>
+											<select ng-model="dob1" style="min-width:70px">
+                                                <option value="" disabled selected>اليوم</option>
+                                                <option value="{{d}}" ng-repeat="d in dyasinmonth">{{d}}</option>
+                                            </select> &sol;
+											<select ng-model="dob2" style="min-width:70px">
+                                                <option value="" disabled selected>الشهر</option>
+                                                <option value="{{m}}" ng-repeat="m in monthsinyear">{{m}}</option>
+                                            </select> &sol;
+											<select ng-model="dob3" style="min-width:70px">
+                                                <option value="" disabled selected>السنة</option>
+                                                <option value="{{y}}" ng-repeat="y in yearsrange">{{y}}</option>
+                                            </select>
+										</div>
+										<div class="form-group">
+											<label for="">الجنس</label>
+											<select class="form-control" ng-model="reggender">
+                                                <option value="" disabled selected>الجنس</option>
+                                                <option value="Male">ذكر</option>
+                                                <option value="Female">انثى</option>
+                                            </select>
+										</div>
+										<input type="file" id="regimage" name="myFile" />
+										<div class="center">
+											<div class="checkbox">
+												<input type="checkbox" ng-model="tcagree"> مع التسجيل يجب ان توافق على <a href="" ng-click="gotopage('t&c')">الشروط و الاحكام</a>
+											</div>
+											<div class="form-group-btn">
+												<button type="submit" class="btn btn-primary" ng-if="tcagree && !choosefacebook" ng-click=" register()">انشاء حساب</button>
+												<button type="submit" class="btn btn-primary" ng-if="tcagree && choosefacebook" ng-click=" fbregister()">انشاء حساب باستخدام الفيس بوك</button>
+												<button type="submit" class="btn btn-primary" disabled ng-if="!tcagree">انشاء حساب</button>
+											</div>
+										</div>
+									</div>
+								</div>
+							</form>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default" data-dismiss="modal">الغاء</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- add sub profile Modal -->
+			<div class="modal fade" id="addsubmodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+							<h4 class="modal-title" id="myModalLabel">اضافة حساب ثانوي</h4>
+						</div>
+						<div class="modal-body">
+							<form ng-submit="subregister()">
+								<div class="row">
+									<div class="col-lg-8 col-lg-offset-2">
+										<div class="form-group">
+											<label for="">اسم المستخدم&ast;</label>
+											<input type="text" class="form-control" ng-model="subregname" required>
+										</div>
+										<div class="form-group">
+											<label for="">البريد الالكتروني&ast;</label>
+											<input type="email" class="form-control" ng-model="subregemail" required>
+										</div>
+										<div class="form-group">
+											<label for="">كلمة السر&ast;</label>
+											<input type="password" class="form-control" ng-model="subregpass" required>
+										</div>
+										<div class="form-group">
+											<label for="">العنوان</label>
+											<input type="text" class="form-control" ng-model="subregadd">
+										</div>
+										<div class="form-group">
+											<label for="">رقم المحمول</label>
+											<input type="text" class="form-control" ng-model="subregmob">
+										</div>
+										<div class="form-group">
+											<label for="">تاريخ الميلاد</label>
+											<select ng-model="subdob1" style="min-width:70px">
+                                                <option value="" disabled selected>اليوم</option>
+                                                <option value="{{d}}" ng-repeat="d in dyasinmonth">{{d}}</option>
+                                            </select> &sol;
+											<select ng-model="subdob2" style="min-width:70px">
+                                                <option value="" disabled selected>الشهر</option>
+                                                <option value="{{m}}" ng-repeat="m in monthsinyear">{{m}}</option>
+                                            </select> &sol;
+											<select ng-model="subdob3" style="min-width:70px">
+                                                <option value="" disabled selected>السنة</option>
+                                                <option value="{{y}}" ng-repeat="y in yearsrange">{{y}}</option>
+                                            </select>
+										</div>
+										<div class="form-group">
+											<label for="">الجنس</label>
+											<select class="form-control" ng-model="subreggender">
+                                                <option value="" disabled selected>الجنس</option>
+                                                <option value="Male">ذكر</option>
+                                                <option value="Female">انثى</option>
+                                            </select>
+										</div>
+										<input type="file" id="subregimage" name="myFile" />
+										<div class="center">
+											<div class="checkbox">
+												<input type="checkbox" ng-model="tcagree"> مع التسجيل يجب ان توافق على <a href="" ng-click="gotopage('t&c')">الشروط و الاحكام</a>
+											</div>
+											<div class="form-group-btn">
+												<button type="submit" class="btn btn-primary" ng-if="tcagree">انشاء حساب</button>
+												<button type="submit" class="btn btn-primary" disabled ng-if="!tcagree">انشاء حساب</button>
+											</div>
+										</div>
+									</div>
+								</div>
+							</form>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default" data-dismiss="modal">الغاء</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- /.header-wrapper -->
+
+		<div class="main-wrapper">
+			<div class="main">
+				<div class="main-inner">
+
+
+
+
+
+					<div ng-view></div>
+
+
+
+
+
+				</div>
+				<!-- /.main-inner -->
+			</div>
+			<!-- /.main -->
+		</div>
+		<!-- /.main-wrapper -->
+
+		<div class="footer-wrapper" ng-controller="footerCtrl">
+			<div class="footer">
+				<div class="footer-widgets">
+					<div class="container">
+						<div class="row">
+							<div class="col-xs-12 col-sm-12 col-md-3">
+								<div class="widget right-border">
+									<h2 class="widgettitle">لماذا تنضم لليف هيلثي</h2>
+
+									<p>
+										في بعض الأحيان، حتى أبسط الأشياء يمكن أن تغير حياتك، وأحيانا سعادتك تبدو غير واضحة على الرغم من كونها تحت أطراف أصابعك
+									</p>
+								</div>
+								<!-- /.widget -->
+							</div>
+							<!-- /.col-* -->
+
+							<div class="col-xs-12 col-sm-12 col-md-2 col-md-offset-1">
+								<div class="widget right-border">
+									<h2 class="widgettitle">مواقع التواصل الاجتماعي</h2>
+
+									<ul class="nav nav-stacked">
+										<li class="nav-item"><a href="https://www.facebook.com/livehealthyeg/" target="_blank" class="nav-link">Facebook</a>
+										</li>
+										<!--
+                                        <li class="nav-item"><a href="" target="_blank" class="nav-link">Twitter</a>
+                                        </li>
+                                        <li class="nav-item"><a href="" target="_blank" class="nav-link">LinkedIn</a>
+                                        </li>
+                                        <li class="nav-item"><a href="" target="_blank" class="nav-link">Google Plus</a>
+                                        </li>
+-->
+									</ul>
+								</div>
+								<!-- /.widget -->
+							</div>
+
+							<div class="col-xs-12 col-sm-12 col-md-2 col-md-offset-1">
+								<div class="widget right-border">
+									<h2 class="widgettitle">يمكنك البحث عن</h2>
+
+									<ul class="nav nav-stacked">
+										<li class="nav-item"><a href="" style="cursor: default" data-toggle="tooltip" data-placement="bottom" title="لم يتوفر بعد" class="nav-link">الصيدليات&nbsp;</a>
+										</li>
+										<li class="nav-item"><a href="" ng-click="gotopage('doctors')" class="nav-link">الاطباء</a>
+										</li>
+										<li class="nav-item"><a href="" ng-click="gotopage('home_visit')" class="nav-link">الزيارة المنزلية</a>
+										</li>
+										<li class="nav-item"><a href="" style="cursor: default" data-toggle="tooltip" data-placement="bottom" title="لم يتوفر بعد" class="nav-link">المعامل&nbsp;<span class="label label-info">قريبا</span></a>
+										</li>
+									</ul>
+								</div>
+								<!-- /.widget -->
+							</div>
+							<!-- /.col-* -->
+
+							<div class="col-xs-12 col-sm-12 col-md-2 col-md-offset-1">
+								<div class="widget">
+									<h2 class="widgettitle">الصفحات</h2>
+
+									<ul class="nav nav-stacked">
+										<li class="nav-item"><a href="" class="nav-link" data-toggle="modal" data-target="#joinusModal">طبيب؟ انضم الينا</a>
+										</li>
+										<li class="nav-item"><a href="" ng-click="gotopage('t&c')" class="nav-link">الشروط و الاحكام</a>
+										</li>
+										<li class="nav-item"><a href="" class="nav-link" data-toggle="modal" data-target="#contactusModal">توصل معنا</a>
+										</li>
+									</ul>
+								</div>
+								<!-- /.widget -->
+							</div>
+							<!-- /.col-* -->
+						</div>
+						<!-- /.row -->
+					</div>
+					<!-- /.container -->
+				</div>
+				<!-- /.footer-widgets -->
+
+
+				<div class="footer-bottom">
+					<div class="container">
+						<a href="" onclick="scrollWin()" class="footer-top-action">
+                            <i class="md-icon">vertical_align_top</i>
+                        </a>
+						<!-- /.footer-top-action -->
+						<div class="footer-bottom-left">
+							- تم التصميم من قبل <a href="http://www.yackeensolutions.com/" target="_blank">Y solutions</a>
+						</div>
+						<!-- /.footer-bottom-left -->
+
+						<div class="footer-bottom-right">
+							Copyright &copy; 2017 - All Rights Reserved
+						</div>
+						<!-- /.footer-bottom-right -->
+					</div>
+					<!-- /.container -->
+				</div>
+				<!-- /.footer-bottom -->
+			</div>
+			<!-- join us Modal -->
+			<div class="modal fade" id="joinusModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+							<h4 class="modal-title" id="myModalLabel">انضم الينا</h4>
+						</div>
+						<div class="modal-body">
+							<form ng-submit="joinusform()">
+								<div class="form-group">
+									<label for="">المكان</label>
+									<input type="text" class="form-control" ng-model="joinLocation" required>
+								</div>
+								<div class="form-group">
+									<label for="">العنوان</label>
+									<input type="text" class="form-control" ng-model="joinAddress" required>
+								</div>
+								<div class="form-group">
+									<label for="">اسم الطبيب</label>
+									<input type="text" class="form-control" ng-model="joinDoctorName" required>
+								</div>
+								<div class="form-group">
+									<label for="">التخصص</label>
+									<input type="text" class="form-control" ng-model="joinSpeciality" required>
+								</div>
+								<div class="form-group">
+									<label for="">رقم المحمول</label>
+									<input type="text" class="form-control" ng-model="joinMobileNumber" required>
+								</div>
+								<div class="form-group">
+									<label for="">البريد الاليكتروني</label>
+									<input type="email" class="form-control" ng-model="joinemail" required>
+								</div>
+								<div class="form-group">
+									<label for="">النوع</label>
+									<input type="text" class="form-control" ng-model="joinType" required>
+								</div>
+								<div class="form-group">
+									<label for="">ملاحظات</label>
+									<textarea type="text" class="form-control" ng-model="joinmsg" required></textarea>
+								</div>
+								<button type="submit" class="btn btn-primary">ارسال</button>
+							</form>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default" data-dismiss="modal">الغاء</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- contact us Modal -->
+			<div class="modal fade" id="contactusModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+							<h4 class="modal-title" id="myModalLabel">تواصل معنا</h4>
+						</div>
+						<div class="modal-body">
+							<form ng-submit="contactusform()">
+								<div class="form-group">
+									<label for="">العنوان</label>
+									<input type="text" class="form-control" ng-model="contactsubject" required>
+								</div>
+								<div class="form-group">
+									<label for="">البريد الاليكتروني</label>
+									<input type="email" class="form-control" ng-model="contactemail" required>
+								</div>
+								<div class="form-group">
+									<label for="">رسالتك</label>
+									<textarea type="text" class="form-control" ng-model="contactmsg" required></textarea>
+								</div>
+								<button type="submit" class="btn btn-primary">ارسال</button>
+							</form>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-primary" data-dismiss="modal">الغاء</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- /.footer -->
+		</div>
+		<!-- /.footer-wrapper -->
+	</div>
+	<!-- /.page-wrapper -->
+
+
+
+	<script type="text/javascript" src="assets/js/jquery.js"></script>
+	<script type="text/javascript" src="assets/js/tether.min.js"></script>
+	<script type="text/javascript" src="assets/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="assets/js/leaflet.js"></script>
+	<script type="text/javascript" src="assets/js/leaflet.markercluster.js"></script>
+	<script type="text/javascript" src="assets/libraries/owl-carousel/owl.carousel.min.js"></script>
+	<script type="text/javascript" src="assets/js/tagsinput.js"></script>
+	<script type="text/javascript" src="assets/js/script.js"></script>
+	<!-- Angular and controller -->
+	<script src="assets/js/angular.min.js"></script>
+	<script src="assets/js/angular-route.min.js"></script>
+
+	<script src="assets/js/angular-cookies.min.js"></script>
+	<script src="assets/js/plugins.js"></script>
+</body>
+<!-- ************//// Designed by Aliaa Hosny  //// ************* -->
+
+</html>
